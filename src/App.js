@@ -1,23 +1,70 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useState } from "react";
+import Cookies from "js-cookie";
+
+import Login from "./LoginComponent/Login";
+import Navbar from "./NavbarComponent/Navbar";
+import Register from "./LoginComponent/Register";
 
 function App() {
+  const [currentForm, setCurrentForm] = useState("login");
+  const [cookie, setCookie] = useState(Cookies.get("token"));
+  const [error, setError] = useState("");
+
+  const setCookieHandler = (data) => {
+    console.log(data);
+    setError("");
+    setCookie(Cookies.set("token", data._id, { expires: 1 }));
+  };
+
+  const removeCookie = () => {
+    Cookies.remove("token");
+    setCookie();
+  };
+
+  const toggleForm = (formName) => {
+    setCurrentForm(formName);
+  };
+
+  const errorHandler = (err) => {
+    console.log(err);
+    setError(err);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {cookie ? (
+        <div>
+          <Navbar onCloseSession={removeCookie} />
+        </div>
+      ) : (
+        <div className="container pt-5">
+          {currentForm === "login" ? (
+            <Login
+              onFormSwitch={toggleForm}
+              onSetCookie={setCookieHandler}
+              onError={errorHandler}
+            />
+          ) : (
+            <Register
+              onFormSwitch={toggleForm}
+              onSetCookie={setCookieHandler}
+              onError={errorHandler}
+            />
+          )}
+          {error && (
+            <div className="row">
+              <div className="col-3"></div>
+              <div className="col-6">
+                <div className="alert alert-danger mt-3">
+                  {error["message"]}
+                </div>
+              </div>
+              <div className="col-3"></div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
