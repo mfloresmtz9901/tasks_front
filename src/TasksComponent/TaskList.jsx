@@ -1,7 +1,15 @@
-const TaskList = () => {
+import { useState } from "react";
+import NewTask from "./TaskForm/NewTask";
+
+const TaskList = (props) => {
+  const [tasks, setTasks] = useState("");
+  const taskListSaveTask = (data) => {
+    //comenzar aqui los requests
+  };
+
   return (
     <div>
-      <div></div>
+      <NewTask onSaveTaskData={taskListSaveTask} />
     </div>
   );
 };

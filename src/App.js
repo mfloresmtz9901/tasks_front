@@ -5,19 +5,22 @@ import Cookies from "js-cookie";
 import Login from "./LoginComponent/Login";
 import Navbar from "./NavbarComponent/Navbar";
 import Register from "./LoginComponent/Register";
+import TaskList from "./TasksComponent/TaskList";
 
 function App() {
   const [currentForm, setCurrentForm] = useState("login");
   const [cookie, setCookie] = useState(Cookies.get("token"));
   const [error, setError] = useState("");
-
+  const [userInfo, setUserInfo] = useState("");
+  // Login methods
   const setCookieHandler = (data) => {
-    console.log(data);
+    setUserInfo(data);
     setError("");
     setCookie(Cookies.set("token", data._id, { expires: 1 }));
   };
 
   const removeCookie = () => {
+    setUserInfo("");
     Cookies.remove("token");
     setCookie();
   };
@@ -36,6 +39,9 @@ function App() {
       {cookie ? (
         <div>
           <Navbar onCloseSession={removeCookie} />
+          <div className="container pt-3">
+            <TaskList user={userInfo} />
+          </div>
         </div>
       ) : (
         <div className="container pt-5">
