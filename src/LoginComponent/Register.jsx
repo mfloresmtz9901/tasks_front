@@ -43,6 +43,7 @@ const Register = (props) => {
     if (response.status === 200) {
       props.onSetCookie(data);
     } else {
+      console.log(data);
       if (data.message.includes("email")) {
         data.message = "Looks like this emails is already in use!";
       } else if (data.message.includes("username")) {

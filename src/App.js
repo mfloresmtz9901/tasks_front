@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 
 import Login from "./LoginComponent/Login";
@@ -9,19 +9,22 @@ import TaskList from "./TasksComponent/TaskList";
 
 function App() {
   const [currentForm, setCurrentForm] = useState("login");
-  const [cookie, setCookie] = useState(Cookies.get("token"));
+  const [cookie, setCookie] = useState();
   const [error, setError] = useState("");
-  const [userInfo, setUserInfo] = useState("");
+
+  useEffect(() => {
+    if (!cookie) {
+      setCookie(Cookies.get("user"));
+    }
+  }, [cookie]);
   // Login methods
   const setCookieHandler = (data) => {
-    setUserInfo(data);
     setError("");
-    setCookie(Cookies.set("token", data._id, { expires: 1 }));
+    setCookie(Cookies.set("user", data._id, { expires: 1 }));
   };
 
   const removeCookie = () => {
-    setUserInfo("");
-    Cookies.remove("token");
+    Cookies.remove("user");
     setCookie();
   };
 
@@ -30,7 +33,6 @@ function App() {
   };
 
   const errorHandler = (err) => {
-    console.log(err);
     setError(err);
   };
 
@@ -40,7 +42,7 @@ function App() {
         <div>
           <Navbar onCloseSession={removeCookie} />
           <div className="container pt-3">
-            <TaskList user={userInfo} />
+            <TaskList user_id={Cookies.get("user")} />
           </div>
         </div>
       ) : (

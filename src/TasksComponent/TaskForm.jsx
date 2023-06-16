@@ -22,6 +22,7 @@ const TaskForm = (props) => {
     const data = {
       title: enteredTitle,
       description: enteredDescription,
+      status: "pending",
     };
 
     setEnteredTitle("");
