@@ -27,8 +27,8 @@ const TaskForm = (props) => {
 
     setEnteredTitle("");
     setEnteredDescription("");
-    props.stopEditing();
     props.onSaveTask(data);
+    props.stopEditing();
   };
 
   return (
